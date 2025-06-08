@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
+
 <body class="flex flex-col min-h-screen text-white">
+    <?php
+    session_start();
+    require_once "./../dao/MusicaDAO.php";
+
+    // Recupera dados antigos do formulário, se existirem
+    $dadosAntigos = $_SESSION['dadosNaoSalvos'] ?? [];
+    unset($_SESSION['dadosNaoSalvos']);
+
+    $mensagem = "";
+    $tipo = "";
+
+    if (isset($_SESSION['erro'])) {
+        $mensagem = $_SESSION['erro'];
+        $tipo = "erro";
+        unset($_SESSION['erro']);
+    } elseif (isset($_SESSION['sucesso'])) {
+        $mensagem = $_SESSION['sucesso'];
+        $tipo = "sucesso";
+        unset($_SESSION['sucesso']);
+    }
+    ?>
     <!-- NAVBAR -->
     <nav class="w-full px-4 flex items-center justify-between shadow max-h-20">
         <div class="flex-1 flex items-center">
@@ -35,73 +58,152 @@
             Adicionar Música
         </h1>
         <!-- Formulário de cadastro -->
-        <form class="w-full max-w-lg bg-white/10 rounded-xl p-6 mb-10 shadow-lg flex flex-col gap-4">
+        <form class="w-full max-w-lg bg-white/10 rounded-xl p-6 mb-10 shadow-lg flex flex-col gap-4" method="POST" action="./../controllers/verifica.php">
             <div>
                 <label for="titulo" class="block mb-1 text-white font-semibold">Título</label>
-                <input type="text" id="titulo" name="titulo" required
+                <input type="text" id="titulo" name="titulo"
                     placeholder="Ex: Shape of You"
-                    class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]">
+                    class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]"
+                    value="<?= isset($dadosAntigos['titulo']) ? $dadosAntigos['titulo'] : '' ?>">
             </div>
             <div>
                 <label for="artista" class="block mb-1 text-white font-semibold">Artista</label>
-                <input type="text" id="artista" name="artista" required
+                <input type="text" id="artista" name="artista"
                     placeholder="Ex: Ed Sheeran"
-                    class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]">
+                    class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]"
+                    value="<?= isset($dadosAntigos['artista']) ? $dadosAntigos['artista'] : '' ?>">
             </div>
             <div>
                 <label for="genero" class="block mb-1 text-white font-semibold">Gênero</label>
-                <select id="genero" name="genero" required
+                <select id="genero" name="genero"
                     class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]">
-                    <option value="" disabled selected>Selecione o gênero</option>
-                    <option value="P">Pop</option>
-                    <option value="R">Rock</option>
-                    <option value="S">Sertanejo</option>
-                    <option value="E">Eletrônica</option>
-                    <option value="O">Outro</option>
+                    <option value="" <?= empty($dadosAntigos['genero']) ? 'selected' : '' ?>>Selecione o gênero</option>
+                    <option value="P" <?= (isset($dadosAntigos['genero']) && $dadosAntigos['genero'] == 'P') ? 'selected' : '' ?>>Pop</option>
+                    <option value="R" <?= (isset($dadosAntigos['genero']) && $dadosAntigos['genero'] == 'R') ? 'selected' : '' ?>>Rock</option>
+                    <option value="S" <?= (isset($dadosAntigos['genero']) && $dadosAntigos['genero'] == 'S') ? 'selected' : '' ?>>Sertanejo</option>
+                    <option value="E" <?= (isset($dadosAntigos['genero']) && $dadosAntigos['genero'] == 'E') ? 'selected' : '' ?>>Eletrônica</option>
+                    <option value="O" <?= (isset($dadosAntigos['genero']) && $dadosAntigos['genero'] == 'O') ? 'selected' : '' ?>>Outro</option>
                 </select>
             </div>
             <div>
                 <label for="idioma" class="block mb-1 text-white font-semibold">Idioma</label>
-                <select id="idioma" name="idioma" required
+                <select id="idioma" name="idioma"
                     class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]">
-                    <option value="" disabled selected>Selecione o idioma</option>
-                    <option value="P">Português</option>
-                    <option value="I">Inglês</option>
-                    <option value="E">Espanhol</option>
-                    <option value="F">Francês</option>
-                    <option value="O">Outro</option>
+                    <option value="" <?= empty($dadosAntigos['idioma']) ? 'selected' : '' ?>>Selecione o idioma</option>
+                    <option value="P" <?= (isset($dadosAntigos['idioma']) && $dadosAntigos['idioma'] == 'P') ? 'selected' : '' ?>>Português</option>
+                    <option value="I" <?= (isset($dadosAntigos['idioma']) && $dadosAntigos['idioma'] == 'I') ? 'selected' : '' ?>>Inglês</option>
+                    <option value="E" <?= (isset($dadosAntigos['idioma']) && $dadosAntigos['idioma'] == 'E') ? 'selected' : '' ?>>Espanhol</option>
+                    <option value="F" <?= (isset($dadosAntigos['idioma']) && $dadosAntigos['idioma'] == 'F') ? 'selected' : '' ?>>Francês</option>
+                    <option value="O" <?= (isset($dadosAntigos['idioma']) && $dadosAntigos['idioma'] == 'O') ? 'selected' : '' ?>>Outro</option>
                 </select>
             </div>
             <div>
                 <label for="duracao" class="block mb-1 text-white font-semibold">Duração (minutos)</label>
-                <input type="number" id="duracao" name="duracao" min="1" max="30" required
+                <input type="number" id="duracao" name="duracao" min="1" max="30"
                     placeholder="Ex: 4"
-                    class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]">
+                    class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]"
+                    value="<?= isset($dadosAntigos['duracao']) ? $dadosAntigos['duracao'] : '' ?>">
             </div>
             <div>
-        <label for="imagem" class="block mb-1 text-white font-semibold">URL da Imagem</label>
-        <input type="url" id="imagem" name="imagem" placeholder="https://exemplo.com/imagem.jpg"
-            class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]">
-    </div>
+                <label for="imagem" class="block mb-1 text-white font-semibold">URL da Imagem</label>
+                <input type="url" id="imagem" name="imagem" placeholder="https://exemplo.com/imagem.jpg"
+                    class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]"
+                    value="<?= isset($dadosAntigos['imagem']) ? $dadosAntigos['imagem'] : '' ?>">
+            </div>
             <button type="submit"
                 class="mt-2 px-6 py-2 rounded-full font-bold bg-[var(--cor2)] text-white hover:bg-[var(--cor1)] transition">
                 Adicionar Música
             </button>
         </form>
 
-        <section class="w-full max-w-2xl">
+        <section class="w-full max-w-6xl">
             <h2 class="text-2xl font-semibold mb-4 text-white">Músicas cadastradas</h2>
-            <ul class="space-y-3">
-                <li class="bg-white/10 rounded-lg px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between">
-                    <span class="font-bold">Shape of You</span>
-                    <span class="text-sm text-[var(--texto-secundario)]">Ed Sheeran • Pop</span>
-                </li>
-            </ul>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php
+                //Listar músicas
+                $matriz = MusicaDAO::listarMusicas();
+                if (!$matriz || count($matriz) === 0) {
+                    echo '<p class="text-[var(--texto-secundario)]">Nenhuma música cadastrada ainda.</p>';
+                } else {
+                    foreach ($matriz as $i => $musica) {
+                        // Tradução do gênero
+                        switch ($musica['genero'] ?? '') {
+                            case 'P':
+                                $genero = "Pop";
+                                break;
+                            case 'R':
+                                $genero = "Rock";
+                                break;
+                            case 'S':
+                                $genero = "Sertanejo";
+                                break;
+                            case 'E':
+                                $genero = "Eletrônica";
+                                break;
+                            case 'O':
+                                $genero = "Outro";
+                                break;
+                            default:
+                                $genero = "N/A";
+                                break;
+                        }
+                        // Tradução do idioma
+                        switch ($musica['idioma'] ?? '') {
+                            case 'P':
+                                $idioma = "Português";
+                                break;
+                            case 'I':
+                                $idioma = "Inglês";
+                                break;
+                            case 'E':
+                                $idioma = "Espanhol";
+                                break;
+                            case 'F':
+                                $idioma = "Francês";
+                                break;
+                            case 'O':
+                                $idioma = "Outro";
+                                break;
+                            default:
+                                $idioma = "N/A";
+                                break;
+                        }
+                        echo "
+                        <div class='bg-white/10 rounded-xl shadow-lg p-4 flex flex-col items-center'>
+                            <img src='" . $musica['imagem_url']  . "' alt='Capa da música' class='w-32 h-32 object-cover rounded mb-4 bg-white/20'>
+                            <h5 class='font-bold text-lg text-white mb-1 text-center'>" . ($i + 1) . " - " . $musica['titulo'] . "</h5>
+                            <p class='text-[var(--texto-secundario)] text-sm mb-1 text-center'>" . $musica['artista'] . "</p>
+                            <p class='text-xs mb-1 text-center'><span class='font-semibold'>Gênero:</span> {$genero}</p>
+                            <p class='text-xs mb-1 text-center'><span class='font-semibold'>Idioma:</span> {$idioma}</p>
+                            <p class='text-xs mb-2 text-center'><span class='font-semibold'>Duração:</span> " . $musica["duracao"] . " min</p>
+                            <a href='../controllers/excluir.php?id=" . $musica['id'] . "' onclick='return confirm(\"Confirma a exclusão?\")' class='mt-2 px-4 py-1 rounded-full bg-red-600 text-white hover:bg-red-800 transition text-sm font-semibold flex items-center gap-1'>
+                                <i class='bi bi-trash-fill'></i> Excluir
+                            </a>
+                        </div>
+                        ";
+                    }
+                }
+
+                ?>
+            </div>
         </section>
     </main>
-    <footer class="text-center py-4 mt-auto bg-white/10 text-[var(--texto-principal)] text-base tracking-wide">
-        Projeto Phpfy © 2025
-    </footer>
+ 
+    <?php if ($mensagem): ?>
+        <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full text-black relative">
+                <h2 class="text-xl font-bold mb-4 <?php echo $tipo === 'erro' ? 'text-red-600' : 'text-green-600'; ?>">
+                    <?php echo $tipo === 'erro' ? 'Erro' : 'Sucesso'; ?>
+                </h2>
+                <p class="mb-4"><?php echo $mensagem; ?></p>
+                <button onclick="document.getElementById('modal').classList.add('hidden')"
+                    class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+                <button onclick="document.getElementById('modal').classList.add('hidden')"
+                    class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Fechar</button>
+            </div>
+        </div>
+    <?php endif; ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </body>
+
 </html>

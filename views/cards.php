@@ -26,7 +26,7 @@
                 Início
             </a>
             <a href="./formulario.php" class="text-white hover:text-[var(--cor3)] font-semibold transition">
-                Gerencias Músicas
+                Gerenciar Músicas
             </a>
         </div>
     </nav>
@@ -36,27 +36,52 @@
         </h1>
         <!-- Cards de músicas -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
-            <!-- Card exemplo 1 -->
-            <div class="bg-white/10 rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                <div class="w-32 h-32 bg-white/20 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=facearea&w=256&q=80" alt="Capa da música" class="object-cover w-full h-full">
-                </div>
-                <h2 class="font-bold text-xl text-white mb-1 text-center">Shape of You</h2>
-                <p class="text-[var(--texto-secundario)] text-sm mb-2 text-center">Ed Sheeran</p>
-                <div class="flex flex-wrap gap-2 justify-center mb-2">
-                    <span class="px-2 py-1 rounded-full bg-[var(--cor2)]/80 text-xs font-semibold">Pop</span>
-                    <span class="px-2 py-1 rounded-full bg-[var(--cor3)]/80 text-xs font-semibold">Inglês</span>
-                    <span class="px-2 py-1 rounded-full bg-white/20 text-xs font-semibold">3:54 min</span>
-                </div>
-                <button class="mt-2 px-4 py-1 rounded-full bg-[var(--cor1)] text-white hover:bg-[var(--cor3)] transition text-sm font-semibold">
-                    Ver detalhes
-                </button>
-            </div>
+            <?php
+            require_once './../dao/MusicaDAO.php';
+            $matriz = MusicaDAO::listarMusicas();
+            if (!$matriz || count($matriz) === 0) {
+                echo '<p class="text-[var(--texto-secundario)] col-span-3">Nenhuma música cadastrada ainda.</p>';
+            } else {
+                foreach ($matriz as $i => $musica) {
+                    // Tradução do gênero
+                    switch ($musica['genero'] ?? '') {
+                        case 'P': $genero = "Pop"; break;
+                        case 'R': $genero = "Rock"; break;
+                        case 'S': $genero = "Sertanejo"; break;
+                        case 'E': $genero = "Eletrônica"; break;
+                        case 'O': $genero = "Outro"; break;
+                        default:  $genero = "N/A"; break;
+                    }
+                    // Tradução do idioma
+                    switch ($musica['idioma'] ?? '') {
+                        case 'P': $idioma = "Português"; break;
+                        case 'I': $idioma = "Inglês"; break;
+                        case 'E': $idioma = "Espanhol"; break;
+                        case 'F': $idioma = "Francês"; break;
+                        case 'O': $idioma = "Outro"; break;
+                        default:  $idioma = "N/A"; break;
+                    }
+                    echo "
+                    <div class='bg-white/10 rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition'>
+                        <div class='w-32 h-32 bg-white/20 rounded-lg mb-4 flex items-center justify-center overflow-hidden'>
+                            <img src='" . htmlspecialchars($musica['imagem_url'] ?? '') . "' alt='Capa da música' class='object-cover w-full h-full'>
+                        </div>
+                        <h2 class='font-bold text-xl text-white mb-1 text-center'>" . ($i+1) . " - " . htmlspecialchars($musica['titulo'] ?? '') . "</h2>
+                        <p class='text-[var(--texto-secundario)] text-sm mb-2 text-center'>" . htmlspecialchars($musica['artista'] ?? '') . "</p>
+                        <div class='flex flex-wrap gap-2 justify-center mb-2'>
+                            <span class='px-2 py-1 rounded-full bg-[var(--cor2)]/80 text-xs font-semibold'>{$genero}</span>
+                            <span class='px-2 py-1 rounded-full bg-[var(--cor3)]/80 text-xs font-semibold'>{$idioma}</span>
+                            <span class='px-2 py-1 rounded-full bg-white/20 text-xs font-semibold'>" . htmlspecialchars($musica['duracao'] ?? '') . " min</span>
+                        </div>
+                       
+                    </div>
+                    ";
+                }
+            }
+            ?>
         </div>
     </main>
-    <footer class="text-center py-4 mt-auto bg-white/10 text-[var(--texto-principal)] text-base tracking-wide">
-        Projeto Phpfy © 2025
-    </footer>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </body>
 </html>

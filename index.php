@@ -27,9 +27,7 @@
             </a>
         </div>
     </main>
-    <footer class="text-center py-4 mt-auto bg-white/10 text-[var(--texto-principal)] text-base tracking-wide">
-        Projeto Phpfy © 2025
-    </footer>
+  
     <!-- Bootstrap Icons CDN para os ícones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </body>
