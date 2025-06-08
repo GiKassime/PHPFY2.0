@@ -1,0 +1,17 @@
+:root {
+    --cor1: #223140;
+    --cor2: #5c7a94;
+    --cor3: #9bbac7;
+    --cor4: #f0f1ce;
+    --texto-principal: #fff;
+    --texto-secundario: #f8f9fa;
+}
+
+body {
+    background:var(--cor1);
+    background-size: cover, auto;
+    color: var(--texto-principal);
+}
+nav {
+    background: rgba(92, 122, 148, 0.7); /* cor2 com transparência */
+}
