@@ -99,7 +99,7 @@
             </div>
             <div>
                 <label for="duracao" class="block mb-1 text-white font-semibold">Duração (minutos)</label>
-                <input type="number" id="duracao" name="duracao" min="1" max="30"
+                <input type="number" id="duracao" name="duracao"
                     placeholder="Ex: 4"
                     class="w-full px-4 py-2 rounded-lg bg-white/80 text-black focus:outline-none focus:ring-2 focus:ring-[var(--cor2)]"
                     value="<?= isset($dadosAntigos['duracao']) ? $dadosAntigos['duracao'] : '' ?>">
