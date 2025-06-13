@@ -11,13 +11,17 @@
 
 <body class="flex flex-col min-h-screen text-white">
     <?php
+    ini_set('display_errors', 1);
+    ini_set('display_startup_erros', 1);
+    error_reporting(E_ALL);
+
     session_start();
     require_once "./../dao/MusicaDAO.php";
 
     // Recupera dados antigos do formulário, se existirem
     $dadosAntigos = $_SESSION['dadosNaoSalvos'] ?? [];
     unset($_SESSION['dadosNaoSalvos']);
-
+    $musicaDAO = new MusicaDAO();
     $mensagem = "";
     $tipo = "";
 
@@ -117,78 +121,41 @@
         </form>
 
         <section class="w-full max-w-6xl">
-            <h2 class="text-2xl font-semibold mb-4 text-white">Músicas cadastradas</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php
-                //Listar músicas
-                $matriz = MusicaDAO::listarMusicas();
-                if (!$matriz || count($matriz) === 0) {
-                    echo '<p class="text-[var(--texto-secundario)]">Nenhuma música cadastrada ainda.</p>';
-                } else {
-                    foreach ($matriz as $i => $musica) {
-                        // Tradução do gênero
-                        switch ($musica['genero'] ?? '') {
-                            case 'P':
-                                $genero = "Pop";
-                                break;
-                            case 'R':
-                                $genero = "Rock";
-                                break;
-                            case 'S':
-                                $genero = "Sertanejo";
-                                break;
-                            case 'E':
-                                $genero = "Eletrônica";
-                                break;
-                            case 'O':
-                                $genero = "Outro";
-                                break;
-                            default:
-                                $genero = "N/A";
-                                break;
-                        }
-                        // Tradução do idioma
-                        switch ($musica['idioma'] ?? '') {
-                            case 'P':
-                                $idioma = "Português";
-                                break;
-                            case 'I':
-                                $idioma = "Inglês";
-                                break;
-                            case 'E':
-                                $idioma = "Espanhol";
-                                break;
-                            case 'F':
-                                $idioma = "Francês";
-                                break;
-                            case 'O':
-                                $idioma = "Outro";
-                                break;
-                            default:
-                                $idioma = "N/A";
-                                break;
-                        }
-                        echo "
-                        <div class='bg-white/10 rounded-xl shadow-lg p-4 flex flex-col items-center'>
-                            <img src='" . $musica['imagem_url']  . "' alt='Capa da música' class='w-32 h-32 object-cover rounded mb-4 bg-white/20'>
-                            <h5 class='font-bold text-lg text-white mb-1 text-center'>" . ($i + 1) . " - " . $musica['titulo'] . "</h5>
-                            <p class='text-[var(--texto-secundario)] text-sm mb-1 text-center'>" . $musica['artista'] . "</p>
-                            <p class='text-xs mb-1 text-center'><span class='font-semibold'>Gênero:</span> {$genero}</p>
-                            <p class='text-xs mb-1 text-center'><span class='font-semibold'>Idioma:</span> {$idioma}</p>
-                            <p class='text-xs mb-2 text-center'><span class='font-semibold'>Duração:</span> " . $musica["duracao"] . " min</p>
-                            <a href='../controllers/excluir.php?id=" . $musica['id'] . "' onclick='return confirm(\"Confirma a exclusão?\")' class='mt-2 px-4 py-1 rounded-full bg-red-600 text-white hover:bg-red-800 transition text-sm font-semibold flex items-center gap-1'>
-                                <i class='bi bi-trash-fill'></i> Excluir
-                            </a>
-                        </div>
-                        ";
-                    }
-                }
 
-                ?>
-            </div>
+            <h2 class="text-2xl font-semibold mb-4 text-white">Músicas cadastradas</h2>
+            <?php
+            //Listar músicas
+            $musicas =  $musicaDAO->listarMusicas();
+            if (!$musicas || count($musicas) === 0) : ?>
+                <p class="text-[var(--texto-secundario)]">Nenhuma música cadastrada ainda.</p>
+
+            <?php else: ?>
+                <table class="min-w-full divide-y divide-gray-700 bg-gray-800 text-white text-sm">
+                    <thead class="bg-gray-900">
+                        <tr>
+                            <th class="px-4 py-3 text-left">Id</th>
+                            <th class="px-4 py-3 text-left">Imagem</th>
+                            <th class="px-4 py-3 text-left">Título</th>
+                            <th class="px-4 py-3 text-left">Artista</th>
+                            <th class="px-4 py-3 text-left">Gênero</th>
+                            <th class="px-4 py-3 text-left">Idioma</th>
+                            <th class="px-4 py-3 text-left">Duração</th>
+                            <th class="px-4 py-3 text-left">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+                        <?php
+                        foreach ($musicas as $i => $musica) {
+                            echo $musica->criaLinha();
+                        }
+                        ?>
+                        </tbody>
+                </table>
+            <?php endif; ?>
+
         </section>
     </main>
- 
+
     <?php if ($mensagem): ?>
         <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full text-black relative">

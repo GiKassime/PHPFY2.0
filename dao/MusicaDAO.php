@@ -20,14 +20,31 @@ class MusicaDAO {
         ));
     }
 
-    public static function listarMusicas() {
+    public  function listarMusicas() {
         $conexao = Conexao::getConexao();
         $sql = "SELECT * FROM musicas";
         
         $stm = $conexao->prepare($sql);
         $stm->execute();
         
-        return $stm->fetchAll();
+        return $this->mapMusicas($stm->fetchAll());
+    }
+
+    protected function mapMusicas($array){
+        $arrayMusicas = [];
+        foreach ($array as $key => $musica) {
+            $m = new Musica(
+                $musica['titulo'], 
+                $musica['artista'], 
+                $musica['genero'], 
+                $musica['idioma'], 
+                $musica['duracao'], 
+                $musica['imagem_url'], 
+                $musica['id']
+            );
+            array_push($arrayMusicas, $m);
+        }
+        return $arrayMusicas;
     }
 
     public static function buscarMusicaPorId($id) {
@@ -53,7 +70,7 @@ class MusicaDAO {
     public static function excluirMusica($id) {
         $conexao = Conexao::getConexao();
         $sql = "DELETE FROM musicas WHERE id = ?";
-        
+    
         $stm = $conexao->prepare($sql);
         return $stm->execute([$id]);
     } 

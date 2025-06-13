@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 require_once "./../dao/MusicaDAO.php";
 require_once "./../utils/Conexao.php";
-
+$musicaDAO = new MusicaDAO();
 $msgErro = "";
 
 if (isset($_POST['titulo'])) {
@@ -23,7 +23,7 @@ if (isset($_POST['titulo'])) {
         $erros[] = "O campo título é obrigatório.";
     } else if (strlen($titulo) < 3 || strlen($titulo) > 50) {
         $erros[] = "O campo título deve ter entre 3 e 50 caracteres.";
-    }else if (MusicaDAO::buscarMusicaPorNome($titulo)) {
+    }else if ($musicaDAO->buscarMusicaPorNome($titulo)) {
         $erros[] = "Já existe uma música cadastrada com esse título.";
     }
 
@@ -54,7 +54,7 @@ if (isset($_POST['titulo'])) {
             // Cria o objeto Musica
             $musica = new Musica($titulo, $artista, $genero, $idioma, $duracao, $imagem);
             // Usa o DAO para inserir
-            if (MusicaDAO::adicionarMusica($musica)) {
+            if ($musicaDAO->adicionarMusica($musica)) {
                 session_start();
                 $_SESSION['sucesso'] = "Música cadastrada com sucesso!";                
                 header('Location: ../views/formulario.php');

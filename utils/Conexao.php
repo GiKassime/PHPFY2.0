@@ -11,7 +11,7 @@ class Conexao {
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                //Define o tipo do retorno das consultas
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC);
-                self::$conn = new PDO("mysql:host=localhost;port=3308;dbname=phpfy", "root", "root", $opcoes);
+                self::$conn = new PDO("mysql:host=localhost;port=3306;dbname=phpfy", "root", "bancodedados", $opcoes);
         }
         return self::$conn;
     }
