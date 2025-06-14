@@ -20,14 +20,14 @@ class Musica
         $this->id = $id;
     }
     public function criaCard($i){
-        return "<div class='bg-white/10 rounded-xl shadow-lg p-4 flex flex-col items-center'>
+         return "<div class='bg-white/10 rounded-xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition'>
         <img src='" . $this->imagem_url  . "' alt='Capa da música' class='w-32 h-32 object-cover rounded mb-4 bg-white/20'>
         <h5 class='font-bold text-lg text-white mb-1 text-center'>" . ($i + 1) . " - " . $this->titulo . "</h5>
         <p class='text-[var(--texto-secundario)] text-sm mb-1 text-center'>" . $this->artista . "</p>
         <p class='text-xs mb-1 text-center'><span class='font-semibold'>Gênero:</span> {$this->switchGenero()}</p>
         <p class='text-xs mb-1 text-center'><span class='font-semibold'>Idioma:</span> {$this->switchIdioma()}</p>
         <p class='text-xs mb-2 text-center'><span class='font-semibold'>Duração:</span> " . $this->duracao . " min</p>
-        </div>";
+    </div>";
     }
     public function criaLinha()
     {
@@ -45,7 +45,7 @@ class Musica
     <td class="px-4 py-3 text-sm">' . $this->switchIdioma() . '</td>
     <td class="px-4 py-3 text-sm">' . $this->duracao . 'min</td>
     <td class="px-4 py-3">
-        <a href="../controllers/excluir.php?id=' . $this->id . '"
+        <a href="../utils/excluir.php?id=' . $this->id . '"
             onclick="return confirm("Confirma a exclusão?")"
             class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-600 text-white hover:bg-red-800 text-xs font-semibold transition">
             <i class="bi bi-trash-fill"></i> Excluir
@@ -231,4 +231,6 @@ class Musica
 
         return $this;
     }
+
+   
 }

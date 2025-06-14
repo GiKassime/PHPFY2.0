@@ -6,7 +6,7 @@ class MusicaDAO {
 
     public static function adicionarMusica(Musica $musica) {
         $conexao = Conexao::getConexao();
-        $sql = "INSERT INTO musicas (titulo, artista, genero, idioma, duracao, imagem_url) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO musicas (titulo, artista, genero, idioma, duracao, imagem_url,caminho_arquivo) VALUES (?,?, ?, ?, ?, ?)";
         
         $stm = $conexao->prepare($sql);
         
@@ -16,8 +16,7 @@ class MusicaDAO {
             $musica->getGenero(), 
             $musica->getIdioma(), 
             $musica->getDuracao(), 
-            $musica->getImagemUrl()
-        ));
+            $musica->getImagemUrl()        ));
     }
 
     public  function listarMusicas() {
@@ -39,7 +38,7 @@ class MusicaDAO {
                 $musica['genero'], 
                 $musica['idioma'], 
                 $musica['duracao'], 
-                $musica['imagem_url'], 
+                $musica['imagem_url'],
                 $musica['id']
             );
             array_push($arrayMusicas, $m);

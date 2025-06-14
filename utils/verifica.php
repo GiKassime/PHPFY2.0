@@ -18,7 +18,11 @@ if (isset($_POST['titulo'])) {
 
     // Validações
     $erros = [];
-    
+    if(empty($arquivo)) {
+        $erros[] = "O campo arquivo MP3 é obrigatório.";
+    } else if (!preg_match('/\.(mp3|wav)$/i', $arquivo)) {
+        $erros[] = "O arquivo deve ser um MP3 ou WAV válido.";
+    }
     if (empty($titulo)) {
         $erros[] = "O campo título é obrigatório.";
     } else if (strlen($titulo) < 3 || strlen($titulo) > 50) {
@@ -50,9 +54,10 @@ if (isset($_POST['titulo'])) {
     }
 
     if (empty($erros)) {
-        try {
+       
+    try {
             // Cria o objeto Musica
-            $musica = new Musica($titulo, $artista, $genero, $idioma, $duracao, $imagem);
+            $musica = new Musica($titulo, $artista, $genero, $idioma, $duracao, $imagem,$caminhoArquivo);
             // Usa o DAO para inserir
             if ($musicaDAO->adicionarMusica($musica)) {
                 session_start();
@@ -67,15 +72,14 @@ if (isset($_POST['titulo'])) {
         }
     } else {
         $msgErro = implode("<br>", $erros);
+        session_start();
+        $_SESSION['dadosNaoSalvos'] = $_POST; // achei isso massa porque é uma maneira de manter os dados do post
+        $_SESSION['erro'] = $msgErro;
+        header('Location: ../views/formulario.php?');
+        exit;
     }
 }
 
 // Se houve erro, redireciona com mensagem pra session ali q criei só pra isso pq n queria deixar tudo no msm arquivo
-if (!empty($msgErro)) {
-    session_start();
-    $_SESSION['dadosNaoSalvos'] = $_POST; // achei isso massa porque é uma maneira de manter os dados do post
-    $_SESSION['erro'] = $msgErro;
-    header('Location: ../views/formulario.php?');
-    exit;
-}
+
 ?>

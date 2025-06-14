@@ -62,7 +62,7 @@
             Adicionar Música
         </h1>
         <!-- Formulário de cadastro -->
-        <form class="w-full max-w-lg bg-white/10 rounded-xl p-6 mb-10 shadow-lg flex flex-col gap-4" method="POST" action="./../controllers/verifica.php">
+        <form class="w-full max-w-lg bg-white/10 rounded-xl p-6 mb-10 shadow-lg flex flex-col gap-4" method="POST" action="./../utils/verifica.php">
             <div>
                 <label for="titulo" class="block mb-1 text-white font-semibold">Título</label>
                 <input type="text" id="titulo" name="titulo"
@@ -149,7 +149,7 @@
                             echo $musica->criaLinha();
                         }
                         ?>
-                        </tbody>
+                    </tbody>
                 </table>
             <?php endif; ?>
 
