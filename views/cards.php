@@ -42,7 +42,7 @@
             $musicas = new MusicaDAO();
             $musicas = $musicas->listarMusicas();
             if (!$musicas || count($musicas) === 0) {
-                echo '<p class="text-[var(--texto-secundario)] col-span-3">Nenhuma música cadastrada ainda.</p>';
+echo '<p class="text-center text-3xl font-bold text-[var(--texto-secundario)] col-span-3" style="background-color: var(--cor2);">Nenhuma música cadastrada ainda.</p>';
             } else {
                 foreach ($musicas as $i => $musica) {
                     // Tradução do gênero
