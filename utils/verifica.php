@@ -18,11 +18,6 @@ if (isset($_POST['titulo'])) {
 
     // Validações
     $erros = [];
-    if(empty($arquivo)) {
-        $erros[] = "O campo arquivo MP3 é obrigatório.";
-    } else if (!preg_match('/\.(mp3|wav)$/i', $arquivo)) {
-        $erros[] = "O arquivo deve ser um MP3 ou WAV válido.";
-    }
     if (empty($titulo)) {
         $erros[] = "O campo título é obrigatório.";
     } else if (strlen($titulo) < 3 || strlen($titulo) > 50) {
@@ -54,10 +49,9 @@ if (isset($_POST['titulo'])) {
     }
 
     if (empty($erros)) {
-       
     try {
             // Cria o objeto Musica
-            $musica = new Musica($titulo, $artista, $genero, $idioma, $duracao, $imagem,$caminhoArquivo);
+            $musica = new Musica($titulo, $artista, $genero, $idioma, $duracao, $imagem);
             // Usa o DAO para inserir
             if ($musicaDAO->adicionarMusica($musica)) {
                 session_start();
@@ -68,7 +62,8 @@ if (isset($_POST['titulo'])) {
                 $msgErro = "Erro ao cadastrar música no banco de dados.";
             }
         } catch(Exception $e) {
-            $msgErro = "Erro no sistema: " . $e->getMessage();
+          echo "Erro no sistema: " . $e->getMessage();
+            echo "lascou";
         }
     } else {
         $msgErro = implode("<br>", $erros);

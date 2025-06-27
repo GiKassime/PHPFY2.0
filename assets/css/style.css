@@ -5,13 +5,27 @@
     --cor4: #f0f1ce;
     --texto-principal: #fff;
     --texto-secundario: #f8f9fa;
+    --cor-cards: #000000;
 }
 
 body {
-    background:var(--cor1);
+    background: var(--cor1);
     background-size: cover, auto;
     color: var(--texto-principal);
 }
+
 nav {
-    background: rgba(92, 122, 148, 0.7); /* cor2 com transparência */
+    background: rgb(87, 113, 135);
+    /* cor2 com transparência */
+}
+
+#matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -5;
+    pointer-events: none;
+    display: block;
 }

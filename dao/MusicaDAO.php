@@ -6,7 +6,7 @@ class MusicaDAO {
 
     public static function adicionarMusica(Musica $musica) {
         $conexao = Conexao::getConexao();
-        $sql = "INSERT INTO musicas (titulo, artista, genero, idioma, duracao, imagem_url,caminho_arquivo) VALUES (?,?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO musicas (titulo, artista, genero, idioma, duracao, imagem_url) VALUES (?,?, ?, ?, ?, ?)";
         
         $stm = $conexao->prepare($sql);
         

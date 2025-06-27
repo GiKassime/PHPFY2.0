@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body class="flex flex-col min-h-screen text-white">
+<body class="flex flex-col min-h-screen text-white  bg-[var(--cor-cards)]">
+    <canvas id="matrix-bg"></canvas>
    <!-- NAVBAR -->
     <nav class="w-full px-4 flex items-center justify-between shadow max-h-20">
         <div class="flex-1 flex items-center">
@@ -51,7 +52,7 @@
             ?>
         </div>
     </main>
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="../assets/js/matrix.js"></script>
 </body>
 </html>
