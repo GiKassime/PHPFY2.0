@@ -36,27 +36,27 @@ class Musica
     public function criaLinha()
     {
         return '
-        <tr class="hover:bg-gray-700 transition duration-200 text-white">
-                <td class="font-bold text-sm px-4 py-3">' . $this->id . '</td>
+    <tr class="hover:bg-gray-700 transition duration-200 text-white">
+        <td class="font-bold text-sm px-4 py-3">' . $this->id . '</td>
+        <td class="px-4 py-3">
+            <img src="' . $this->imagem_url . '" alt="Capa da música" class="w-16 h-16 object-cover rounded bg-white/20">
+        </td>
+        <td class="font-bold text-sm">' . $this->titulo . '</td>
+        <td class="text-xs text-[var(--texto-secundario)]">' . $this->artista . '</td>
+        <td class="px-4 py-3 text-sm">' . $this->switchGenero() . '</td>
+        <td class="px-4 py-3 text-sm">' . $this->switchIdioma() . '</td>
+        <td class="px-4 py-3 text-sm">' . $this->duracao . 'min</td>
+        <td class="px-4 py-3">
+            <form action="../utils/excluir.php" method="get" onsubmit="return confirm(\'Tem certeza que deseja excluir a música?\');">
+                <input type="hidden" name="id" value="' . $this->id . '">
+                <button type="submit" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-600 text-white hover:bg-red-800 text-xs font-semibold transition">
+                    <i class="bi bi-trash-fill"></i>Excluir
+                </button>
+            </form>
+        </td>
+    </tr>
+';
 
-    <td class="px-4 py-3">
-        <img src="' . $this->imagem_url . '" alt="Capa da música" class="w-16 h-16 object-cover rounded bg-white/20">
-    </td>
-    <td class="font-bold text-sm">' . $this->titulo . '</td>
-    <td class="text-xs text-[var(--texto-secundario)]">' . $this->artista . '</div>
-    </td>
-    <td class="px-4 py-3 text-sm">' . $this->switchGenero() . '</td>
-    <td class="px-4 py-3 text-sm">' . $this->switchIdioma() . '</td>
-    <td class="px-4 py-3 text-sm">' . $this->duracao . 'min</td>
-    <td class="px-4 py-3">
-        <a href="../utils/excluir.php?id=' . $this->id . '"
-            onclick="return confirm("Confirma a exclusão?")"
-            class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-600 text-white hover:bg-red-800 text-xs font-semibold transition">
-            <i class="bi bi-trash-fill"></i> Excluir
-        </a>
-    </td>
-</tr>
-        ';
     }
 
     public function switchIdioma()
